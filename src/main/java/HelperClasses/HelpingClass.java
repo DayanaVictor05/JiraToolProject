@@ -1,5 +1,8 @@
 package HelperClasses;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -7,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import pojo.Jira;
 
@@ -16,10 +20,8 @@ public class HelpingClass {
 		boolean result = false;
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
 
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			PreparedStatement pt = con.prepareStatement(
 					"insert into userDetails(firstName, lastName, mobile, email, passWordd)" + "values(?,?,?,?,?)");
 			pt.setString(1, fname);
@@ -33,11 +35,32 @@ public class HelpingClass {
 			if (i >= 1)
 				result = true;
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return result;
+	}
+
+	private static Connection getMyConnectionObject() {
+		
+		Connection connection=null;
+		String driver = "com.mysql.jdbc.Driver";
+		String url="jdbc:mysql://localhost:3306/besant?characterEncoding=latin1";
+		String uname="root";
+		String pwd="Ryanmervi@09";
+
+		try {
+			Class.forName(driver);
+			connection = DriverManager.getConnection(url,uname,pwd);
+			
+		} catch (ClassNotFoundException | SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return connection;
+
+		
 	}
 
 	public static String authenticateUser(String mail, String psswrd) {
@@ -45,10 +68,9 @@ public class HelpingClass {
 		boolean result = false;
 		String uname = "";
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
+			
 
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			PreparedStatement pt = con
 					.prepareStatement("select * from userDetails " + "where email=?" + "and passWordd=?");
 
@@ -61,7 +83,7 @@ public class HelpingClass {
 				uname = rs.getString(2);
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -74,10 +96,7 @@ public class HelpingClass {
 		boolean result = false;
 
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			PreparedStatement pt = con.prepareStatement(
 					"insert into jiraDetails(Jira_Assignee, Jira_Reporter, Jira_Heading, Jira_Status, notify_email)"
 							+ "values(?,?,?,?,?)");
@@ -95,7 +114,7 @@ public class HelpingClass {
 				break;
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -107,10 +126,7 @@ public class HelpingClass {
 
 		ArrayList<Jira> arrayList = new ArrayList<Jira>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			Statement pt = con.createStatement();
 			ResultSet rs = pt.executeQuery("select * from jiraDetails");
 
@@ -125,7 +141,7 @@ public class HelpingClass {
 
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -137,10 +153,7 @@ public class HelpingClass {
 
 		ArrayList<Jira> arrayList = new ArrayList<Jira>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			PreparedStatement pt = con.prepareStatement(query);
 			pt.setString(1, value);
 			
@@ -157,7 +170,7 @@ public class HelpingClass {
 
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -170,10 +183,7 @@ public class HelpingClass {
 
 		ArrayList<Jira> arrayList = new ArrayList<Jira>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			PreparedStatement pt = con.prepareStatement("select * from jiraDetails where jira_id=?");
 		
 			pt.setInt(1, id);
@@ -191,7 +201,7 @@ public class HelpingClass {
 
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -203,10 +213,7 @@ public class HelpingClass {
 
 		ArrayList<String> arrayList = new ArrayList<String>();
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			Statement pt = con.createStatement();
 			ResultSet rs = pt.executeQuery("select * from userDetails");
 
@@ -217,7 +224,7 @@ public class HelpingClass {
 
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -230,10 +237,7 @@ public class HelpingClass {
 		boolean result = false;
 		String uname = "";
 		try {
-			Class.forName("com.mysql.jdbc.Driver");
-
-			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-					"root", "Ryanmervi@09");
+			Connection con =HelpingClass.getMyConnectionObject();
 			PreparedStatement pt = con
 					.prepareStatement("delete from jiraDetails \s"
 							+ "where jira_id= ?"	);
@@ -249,7 +253,7 @@ public class HelpingClass {
 				break;
 			}
 
-		} catch (ClassNotFoundException | SQLException e) {
+		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -262,10 +266,7 @@ public class HelpingClass {
 		boolean result = false;
 			
 			try {
-				Class.forName("com.mysql.jdbc.Driver");
-
-				Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/besant?characterEncoding=latin1",
-						"root", "Ryanmervi@09");
+				Connection con =HelpingClass.getMyConnectionObject();
 				PreparedStatement pt = con
 						.prepareStatement("update jiraDetails \r\n"
 								+ "set \r\n"
@@ -293,7 +294,7 @@ public class HelpingClass {
 					break;
 				}
 
-			} catch (ClassNotFoundException | SQLException e) {
+			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}

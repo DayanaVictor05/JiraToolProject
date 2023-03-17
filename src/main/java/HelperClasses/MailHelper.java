@@ -1,5 +1,8 @@
 package HelperClasses;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.mail.Authenticator;
@@ -15,43 +18,48 @@ public class MailHelper {
 	public static void sendEmailForNotifyMailId(int id, String notify) {
 
 		String receiver = notify;
-		String email_message = "your ticket id-" + id +" "+ "has been successfully resolved";
+		String email_message = "your ticket id-" + id + " " + "has been successfully resolved";
 
-		final String username = "besant.org@gmail.com";
-		final String password = "gdpegeaeplcxrrxh";
+			final String username = "officialbesant@gmail.com";
+			final String password = "curnmolfwvgjolfh";
+			Properties properties = new Properties();
+			properties.put("mail.smtp.auth", "true");
+			properties.put("mail.smtp.starttls.enable", "true");
+			properties.put("mail.smtp.host", "smtp.gmail.com");
+			properties.put("mail.smtp.port", "587");
 
-		Properties properties = new Properties();
-		properties.put("mail.smtp.auth", "true");
-		properties.put("mail.smtp.starttls.enable", "true");
-		properties.put("mail.smtp.host", "smtp.gmail.com");
-		properties.put("mail.smtp.port", "587");
+			Session session = Session.getInstance(properties, new Authenticator() {
 
-		Session session = Session.getInstance(properties, new Authenticator() {
+				protected PasswordAuthentication getPasswordAuthentication() {
+					// TODO Auto-generated method stub
+					return new PasswordAuthentication(username, password);
+				}
+			});
+			
+			Message messageBody = new MimeMessage(session);
+			try {
+				messageBody.setFrom(new InternetAddress(username));
+				messageBody.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
+				messageBody.setSubject("Jira Ticket Update");
+				messageBody.setText(email_message);
+			} catch (Exception e) {
+				System.out.println("sad");
 
-			protected PasswordAuthentication getPasswordAuthentication() {
-				// TODO Auto-generated method stub
-				return new PasswordAuthentication(username, password);
 			}
-		});
+			
 
-		Message messageBody = new MimeMessage(session);
-		try {
-			messageBody.setFrom(new InternetAddress(username));
-			messageBody.setRecipient(Message.RecipientType.TO, new InternetAddress(receiver));
-			messageBody.setSubject("Jira Ticket Update");
-			messageBody.setText(email_message);
-		} catch (Exception e) {
-			System.out.println("sad");
+			try {
 
-		}
+				Transport.send(messageBody);
+			} catch (Exception e) {
+				// TODO: handle exception
+				System.out.println(e.getLocalizedMessage());
+			}
 
-		try {
 
-			Transport.send(messageBody);
-		} catch (Exception e) {
-			// TODO: handle exception
-			System.out.println(e.getLocalizedMessage());
-		}
+		
+
+		
 
 	}
 
